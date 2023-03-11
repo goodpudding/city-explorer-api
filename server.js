@@ -18,10 +18,12 @@ app.get('/', (req, res) => {
 
 app.get('/weather', (req, res, next) => {
   let citySearched = req.query.city_name;
+  // let lat = req.query.lat;
+  // let lon = req.query.lat;
   try {
     let getCity = data.find((search) => search.city_name === citySearched);
     let selectedCity = getCity.data.map( passedObj => new Forecast(passedObj));
-    res.send(selectedCity);
+    res.status(200).send(selectedCity);
   } catch (error) {
     next(error);
   }
@@ -38,8 +40,9 @@ app.get('*', (req, res) => {
 
 class Forecast {
   constructor(CityObject) {
-    console.log(CityObject);
     this.todaysDate = CityObject.valid_date;
+    this.low = CityObject.low_temp;
+    this.high = CityObject.high_temp;
     this.todaysDescription = CityObject.weather.description;
   }
 }
